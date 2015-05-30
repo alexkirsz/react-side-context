@@ -10,30 +10,23 @@ const contextTreeTypes = {
 
 export function broadcasts(contract) {
   return function(Broadcaster) {
-    return class BroadcasterWrapper extends React.Component {
+    return class BroadcasterWrapper {
       static contextTypes = contextTreeTypes;
       static childContextTypes = contextTreeTypes;
 
       constructor(props, context) {
-        super(props, context);
+        this.props = props;
         this._contract = contract;
-        this._contextTree = new ContextTree(contract, this.context[treeKey]);
+        this._contextTree = new ContextTree(contract, context[treeKey]);
         this._broadcast = this._contextTree.broadcast.bind(this._contextTree);
       }
 
       getChildContext() {
-        return {
-          [treeKey]: this._contextTree,
-        };
+        return { [treeKey]: this._contextTree };
       }
 
       render() {
-        return (
-          <Broadcaster
-            {...this.props}
-            broadcast={this._broadcast}
-          />
-        );
+        return <Broadcaster {...this.props} broadcast={this._broadcast} />;
       }
     };
   }
@@ -46,17 +39,15 @@ export function subscribeTo(contract) {
 
       constructor(props, context) {
         super(props, context);
-        let state = {};
+        let contextValues = {};
         let contextTree = this.context[treeKey];
         this._unsubscribeHandles = contract.forEach(key => {
-          state[key] = contextTree.getValue(key);
+          contextValues[key] = contextTree.getValue(key);
           return contextTree.subscribe(key, newValue => {
-            this.setState({
-              [key]: newValue,
-            });
+            this.setState({ [key]: newValue });
           });
         });
-        this.state = state;
+        this.state = contextValues;
       }
 
       componentWillUnmount() {
