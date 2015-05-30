@@ -47,17 +47,15 @@ export function subscribeTo(contract) {
       constructor(props, context) {
         super(props, context);
         let state = {};
-        let unsubscribeHandles = [];
         let contextTree = this.context[treeKey];
-        contract.forEach(key => {
+        this._unsubscribeHandles = contract.forEach(key => {
           state[key] = contextTree.getValue(key);
-          unsubscribeHandles.push(contextTree.subscribe(key, newValue => {
+          return contextTree.subscribe(key, newValue => {
             this.setState({
               [key]: newValue,
             });
-          }));
+          });
         });
-        this._unsubscribeHandles = unsubscribeHandles;
         this.state = state;
       }
 
