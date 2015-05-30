@@ -19,10 +19,6 @@ class LangBroadcaster extends React.Component {
     this.props.broadcast(nextState);
   }
 
-  _switchLanguage(lang) {
-    this.setState({ lang });
-  }
-
   render() {
     return (
       <SwitchLanguage onSwitch={lang => this.setState({ lang })} />
