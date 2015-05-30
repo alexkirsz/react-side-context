@@ -67,20 +67,19 @@ app.get('/', (req, res) => {
   ));
 });
 
-app.use((req, res) => {
-  // Remove leading /
-  let itemBase = req.originalUrl.slice(1);
+app.use('/:item', (req, res) => {
+  let { item } = req.params;
 
   res.send(React.renderToString(
     <html>
       <head>
-        <title>{itemBase}</title>
+        <title>{item}</title>
       </head>
       <body>
         <div id="container"></div>
         <script src={`http://localhost:${DEV_SERVER_PORT}/bundle.js`} />
         <script dangerouslySetInnerHTML={{
-          __html: `EXAMPLES["./${itemBase}"]()`,
+          __html: `EXAMPLES["./${item}"]()`,
         }} />
       </body>
     </html>
