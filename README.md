@@ -6,7 +6,7 @@ Run `npm start` to start the example server at `localhost:8080`.
 
 ## Usage
 
-From [lang](examples/lang.js):
+From [examples/lang](examples/lang.js):
 
 ```js
 @broadcasts(['lang'])
@@ -55,4 +55,4 @@ class SwitchLanguage {
 
 ## Note
 
-The result of `shouldComponentUpdate` in parent components has no influence in determining if a subscriber will be updated in response to a broadcast. See also [shouldBroadcast](examples/shouldBroadcast.js).
+The result of `shouldComponentUpdate` in parent components has no influence in determining if a subscriber will be updated in response to a broadcast. See also [examples/shouldBroadcast](examples/shouldBroadcast.js).
