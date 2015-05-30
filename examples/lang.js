@@ -1,14 +1,6 @@
-# react-pubsub
+import React from 'react';
+import { broadcasts, subscribeTo } from '../src';
 
-Experiment with subscription-based context for React.
-
-Run `npm start` to start the example server at `localhost:8080`.
-
-## Usage
-
-From [lang](examples/lang.js):
-
-```js
 @broadcasts(['lang'])
 class LangBroadcaster extends React.Component {
   constructor(props, context) {
@@ -55,8 +47,5 @@ class SwitchLanguage {
     );
   }
 }
-```
 
-## Note
-
-The result of `shouldComponentUpdate` in parent components has no influence in determining if a subscriber will be updated in response to a broadcast. See also [shouldBroadcast](examples/shouldBroadcast.js).
+React.render(<LangBroadcaster />, document.getElementById('container'));
