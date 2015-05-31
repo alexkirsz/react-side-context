@@ -24,6 +24,18 @@ export default class Broadcaster {
     });
   }
 
+  broadcastsKey(key) {
+    return this._keys.indexOf(key) !== -1;
+  }
+
+  getValue(key) {
+    if (this.broadcastsKey(key)) {
+      return this._values[key];
+    } else {
+      return this._parent.getValue(key);
+    }
+  }
+
   subscribe(key, callback) {
     if (this.broadcastsKey(key)) {
       this._subscriptions[key].push(callback);
@@ -37,18 +49,6 @@ export default class Broadcaster {
       };
     } else {
       return this._parent.subscribe(key, callback);
-    }
-  }
-
-  broadcastsKey(key) {
-    return this._keys.indexOf(key) !== -1;
-  }
-
-  getValue(key) {
-    if (this.broadcastsKey(key)) {
-      return this._values[key];
-    } else {
-      return this._parent.getValue(key);
     }
   }
 
