@@ -8,7 +8,7 @@ const broadcasterTypes = {
   [broadcasterKey]: PropTypes.instanceOf(Broadcaster),
 };
 
-export function broadcasts(contract) {
+export function broadcasts(keys) {
   return function(Composed) {
     return class BroadcasterWrapper {
       static contextTypes = broadcasterTypes;
@@ -16,11 +16,7 @@ export function broadcasts(contract) {
 
       constructor(props, context) {
         this.props = props;
-        this._contract = contract;
-        this._broadcaster = new Broadcaster(
-          contract,
-          context[broadcasterKey]
-        );
+        this._broadcaster = new Broadcaster(keys, context[broadcasterKey]);
         this._broadcast = this._broadcaster.broadcast.bind(this._broadcaster);
       }
 
@@ -35,7 +31,7 @@ export function broadcasts(contract) {
   }
 }
 
-export function subscribeTo(contract) {
+export function subscribeTo(keys) {
   return function(Composed) {
     return class SubscriberWrapper extends React.Component {
       static contextTypes = broadcasterTypes;
@@ -44,7 +40,7 @@ export function subscribeTo(contract) {
         super(props, context);
         let contextValues = {};
         let broadcaster = this.context[broadcasterKey];
-        this._unsubscribeHandles = contract.map(key => {
+        this._unsubscribeHandles = keys.map(key => {
           contextValues[key] = broadcaster.getValue(key);
           return broadcaster.subscribe(key, newValue => {
             this.setState({ [key]: newValue });
