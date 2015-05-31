@@ -1,5 +1,5 @@
 {
-  "name": "react-pubsub",
+  "name": "react-broadcast",
   "version": "0.0.1",
   "main": "lib/index.js",
   "description": "React experiment with subscription-based context",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Morhaus/react-pubsub.git"
+    "url": "git@github.com:Morhaus/react-broadcast.git"
   },
   "scripts": {
     "start": "babel-node --stage 0 server",

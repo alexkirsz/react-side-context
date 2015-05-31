@@ -1,4 +1,4 @@
-# react-pubsub
+# react-broadcast
 
 Experiment with subscription-based context for React.
 
