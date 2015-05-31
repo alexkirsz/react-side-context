@@ -1,4 +1,4 @@
-const topContextTree = {
+const topBroadcaster = {
   subscribe(key) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn(`\`subscribe\` for \`${key}\` bubbled to the top`);
@@ -12,20 +12,20 @@ const topContextTree = {
   },
 };
 
-export default class ContextTree {
-  constructor(contract, parent = topContextTree) {
-    this._contract = contract;
+export default class Broadcaster {
+  constructor(keys, parent = topBroadcaster) {
+    this._keys = keys;
     this._parent = parent;
 
     this._subscriptions = {};
     this._values = {};
-    contract.forEach(key => {
+    keys.forEach(key => {
       this._subscriptions[key] = [];
     });
   }
 
   subscribe(key, callback) {
-    if (this.hasContract(key)) {
+    if (this.broadcastsKey(key)) {
       this._subscriptions[key].push(callback);
       return () => {
         const idx = this._subscriptions[key].indexOf(callback);
@@ -40,12 +40,12 @@ export default class ContextTree {
     }
   }
 
-  hasContract(key) {
-    return this._contract.indexOf(key) !== -1;
+  broadcastsKey(key) {
+    return this._keys.indexOf(key) !== -1;
   }
 
   getValue(key) {
-    if (this.hasContract(key)) {
+    if (this.broadcastsKey(key)) {
       return this._values[key];
     } else {
       return this._parent.getValue(key);
@@ -54,9 +54,9 @@ export default class ContextTree {
 
   broadcast(map) {
     for (let key in map) {
-      if (!this.hasContract(key)) {
+      if (!this.broadcastsKey(key)) {
         throw new Error(
-          `Cannot broadcast \`${key}\`: key not present in contract.`
+          `Cannot broadcast \`${key}\`: key not present in keys.`
         );
       }
       this._values[key] = map[key];

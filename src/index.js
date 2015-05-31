@@ -1,49 +1,52 @@
 import React, { PropTypes } from 'react';
 
-import ContextTree from './ContextTree';
+import Broadcaster from './Broadcaster';
 
-const treeKey = '__contextTree';
+const broadcasterKey = '__broadcaster';
 
-const contextTreeTypes = {
-  [treeKey]: PropTypes.instanceOf(ContextTree),
+const broadcasterTypes = {
+  [broadcasterKey]: PropTypes.instanceOf(Broadcaster),
 };
 
 export function broadcasts(contract) {
-  return function(Broadcaster) {
+  return function(Composed) {
     return class BroadcasterWrapper {
-      static contextTypes = contextTreeTypes;
-      static childContextTypes = contextTreeTypes;
+      static contextTypes = broadcasterTypes;
+      static childContextTypes = broadcasterTypes;
 
       constructor(props, context) {
         this.props = props;
         this._contract = contract;
-        this._contextTree = new ContextTree(contract, context[treeKey]);
-        this._broadcast = this._contextTree.broadcast.bind(this._contextTree);
+        this._broadcaster = new Broadcaster(
+          contract,
+          context[broadcasterKey]
+        );
+        this._broadcast = this._broadcaster.broadcast.bind(this._broadcaster);
       }
 
       getChildContext() {
-        return { [treeKey]: this._contextTree };
+        return { [broadcasterKey]: this._broadcaster };
       }
 
       render() {
-        return <Broadcaster {...this.props} broadcast={this._broadcast} />;
+        return <Composed {...this.props} broadcast={this._broadcast} />;
       }
     };
   }
 }
 
 export function subscribeTo(contract) {
-  return function(Subscriber) {
+  return function(Composed) {
     return class SubscriberWrapper extends React.Component {
-      static contextTypes = contextTreeTypes;
+      static contextTypes = broadcasterTypes;
 
       constructor(props, context) {
         super(props, context);
         let contextValues = {};
-        let contextTree = this.context[treeKey];
+        let broadcaster = this.context[broadcasterKey];
         this._unsubscribeHandles = contract.map(key => {
-          contextValues[key] = contextTree.getValue(key);
-          return contextTree.subscribe(key, newValue => {
+          contextValues[key] = broadcaster.getValue(key);
+          return broadcaster.subscribe(key, newValue => {
             this.setState({ [key]: newValue });
           });
         });
@@ -55,7 +58,7 @@ export function subscribeTo(contract) {
       }
 
       render() {
-        return <Subscriber {...this.props} {...this.state} />;
+        return <Composed {...this.props} {...this.state} />;
       }
     }
   }
