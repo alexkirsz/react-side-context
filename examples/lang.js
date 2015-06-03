@@ -44,4 +44,4 @@ class SwitchLanguage {
   }
 }
 
-React.render(<LangBroadcaster />, document.getElementById('container'));
+React.render(<LangBroadcaster />, document.body);

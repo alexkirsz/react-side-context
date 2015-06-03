@@ -76,4 +76,4 @@ class Blocker {
 
 }
 
-React.render(<Broadcaster />, document.getElementById('container'));
+React.render(<Broadcaster />, document.body);
