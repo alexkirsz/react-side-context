@@ -1,6 +1,6 @@
 import React from 'react';
 import shallowEqual from 'react/lib/shallowEqual'
-import { broadcasts, masks, observes } from '../src';
+import { broadcasts, observes } from '../src';
 
 const linkKey = '__link';
 
