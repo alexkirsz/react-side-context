@@ -1,5 +1,5 @@
 import React from 'react';
-import { broadcasts, subscribeTo } from '../src';
+import { broadcasts, observes } from '../src';
 
 const languageKey = '__language';
 const nameKey = '__name';
@@ -54,7 +54,7 @@ class Blocker {
 
 }
 
-@subscribeTo([languageKey, nameKey])
+@observes([languageKey, nameKey])
 class Subscriber {
 
   render() {

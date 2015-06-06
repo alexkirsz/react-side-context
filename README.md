@@ -34,7 +34,7 @@ class LangBroadcaster extends React.Component {
   }
 }
 
-@subscribeTo(['lang'])
+@observes(['lang'])
 class SwitchLanguage {
   render() {
     let { lang } = this.props;

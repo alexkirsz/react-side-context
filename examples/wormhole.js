@@ -1,6 +1,6 @@
 import React from 'react';
 import shallowEqual from 'react/lib/shallowEqual'
-import { broadcasts, masks, subscribeTo } from '../src';
+import { broadcasts, masks, observes } from '../src';
 
 const linkKey = '__link';
 
@@ -34,7 +34,7 @@ class Broadcaster extends React.Component {
 
 }
 
-@subscribeTo([linkKey])
+@observes([linkKey])
 @broadcasts([linkKey]) // Mask `linkKey` to children
 class Subscriber {
 

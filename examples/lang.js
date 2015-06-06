@@ -1,5 +1,5 @@
 import React from 'react';
-import { broadcasts, subscribeTo } from '../src';
+import { broadcasts, observes } from '../src';
 
 @broadcasts(['lang'])
 class LangBroadcaster extends React.Component {
@@ -26,7 +26,7 @@ class LangBroadcaster extends React.Component {
   }
 }
 
-@subscribeTo(['lang'])
+@observes(['lang'])
 class SwitchLanguage {
   render() {
     let { lang } = this.props;

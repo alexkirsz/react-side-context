@@ -31,9 +31,9 @@ export function broadcasts(keys) {
   }
 }
 
-export function subscribeTo(keys) {
+export function observes(keys) {
   return function(Composed) {
-    return class SubscriberWrapper extends React.Component {
+    return class ObserverWrapper extends React.Component {
       static contextTypes = broadcasterTypes;
 
       constructor(props, context) {
