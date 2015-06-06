@@ -1,16 +1,16 @@
 import React from 'react';
 import shallowEqual from 'react/lib/shallowEqual'
-import { broadcasts, observes } from '../src';
+import createContext from '../src';
 
-const linkKey = '__link';
+const { broadcasts, observes } = createContext('app');
 
-@broadcasts([linkKey])
+@broadcasts(['link'])
 class Broadcaster extends React.Component {
 
   constructor(props, context) {
     super(props, context);
     this.state = {
-      [linkKey]: true,
+      link: true,
     };
 
     // Replaces initial `getChildContext`
@@ -34,16 +34,16 @@ class Broadcaster extends React.Component {
 
 }
 
-@observes([linkKey])
-@broadcasts([linkKey]) // Mask `linkKey` to children
+@observes(['link'])
+@broadcasts(['link']) // Mask link to children
 class Subscriber {
 
   render() {
     return (
       <ul>
-        <li>Received link: {String(!!this.props[linkKey])}</li>
+        <li>Received link: {String(!!this.props.link)}</li>
 
-        {this.props[linkKey] && <Subscriber />}
+        {this.props.link && <Subscriber />}
       </ul>
     );
   }

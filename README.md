@@ -9,6 +9,10 @@ Run `npm start` to start the example server at `localhost:8080`.
 From [examples/lang](examples/lang.js):
 
 ```js
+import createContext from 'react-side-context';
+
+const { broadcasts, observes } = createContext('app');
+
 @broadcasts(['lang'])
 class LangBroadcaster extends React.Component {
   constructor(props, context) {

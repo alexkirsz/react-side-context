@@ -1,5 +1,7 @@
 import React from 'react';
-import { broadcasts, observes } from '../src';
+import createContext from '../src';
+
+const { broadcasts, observes } = createContext('app');
 
 @broadcasts(['lang'])
 class LangBroadcaster extends React.Component {

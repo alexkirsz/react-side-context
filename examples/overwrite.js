@@ -1,24 +1,23 @@
 import React from 'react';
-import { broadcasts, observes } from '../src';
+import createContext from '../src';
 
-const languageKey = '__language';
-const nameKey = '__name';
+const { broadcasts, observes } = createContext('app');
 
-@broadcasts([languageKey, nameKey])
+@broadcasts(['language', 'name'])
 class Broadcaster extends React.Component {
 
   constructor(props, context) {
     super(props, context);
     this.state = {
-      [languageKey]: 'en',
-      [nameKey]: 'World',
+      language: 'en',
+      name: 'World',
     };
 
     // Replaces initial `getChildContext`
     this.broadcast(props, this.state);
 
-    setTimeout(() => this.setState({ [languageKey]: 'fr' }), 1000);
-    setTimeout(() => this.setState({ [nameKey]: 'React' }), 2000);
+    setTimeout(() => this.setState({ language: 'fr' }), 1000);
+    setTimeout(() => this.setState({ name: 'React' }), 2000);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -38,13 +37,13 @@ class Broadcaster extends React.Component {
 
 }
 
-@broadcasts([languageKey])
+@broadcasts(['language'])
 class Overwrite extends React.Component {
 
   constructor(props, context) {
     super(props, context);
     this.props.broadcast({
-      [languageKey]: 'de',
+      language: 'de',
     });
   }
 
@@ -58,14 +57,14 @@ class Overwrite extends React.Component {
 
 }
 
-@observes([languageKey, nameKey])
+@observes(['language', 'name'])
 class Subscriber extends React.Component {
 
   render() {
     return (
       <ul>
-        <li>Language: {this.props[languageKey]}</li>
-        <li>Name: {this.props[nameKey]}</li>
+        <li>Language: {this.props.language}</li>
+        <li>Name: {this.props.name}</li>
       </ul>
     );
   }
