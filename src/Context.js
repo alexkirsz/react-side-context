@@ -1,18 +1,4 @@
-const topBroadcaster = {
-  subscribe(key) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(`\`subscribe\` for \`${key}\` bubbled to the top`);
-    }
-  },
-
-  getValue(key) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(`\`getValue\` for \`${key}\` bubbled to the top`);
-    }
-  },
-};
-
-export default class Broadcaster {
+export default class Context {
   constructor(keys, parent = topBroadcaster) {
     this._keys = keys;
     this._parent = parent;

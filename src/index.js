@@ -1,61 +1,81 @@
 import React, { PropTypes } from 'react';
 
-import Broadcaster from './Broadcaster';
+import Context from './Context';
 
-const broadcasterKey = '__broadcaster';
+export default function createContext(contextKey) {
+  const contextTypes = {
+    [contextKey]: PropTypes.instanceOf(Context),
+  };
 
-const broadcasterTypes = {
-  [broadcasterKey]: PropTypes.instanceOf(Broadcaster),
-};
-
-export function broadcasts(keys) {
-  return function(Composed) {
-    return class BroadcasterWrapper {
-      static contextTypes = broadcasterTypes;
-      static childContextTypes = broadcasterTypes;
-
-      constructor(props, context) {
-        this.props = props;
-        this._broadcaster = new Broadcaster(keys, context[broadcasterKey]);
-        this._broadcast = this._broadcaster.broadcast.bind(this._broadcaster);
+  const topContext = {
+    subscribe(key) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `\`subscribe\` for \`${key}\` of \`${contextKey}\` bubbled to the top`
+        );
       }
+    },
 
-      getChildContext() {
-        return { [broadcasterKey]: this._broadcaster };
+    getValue(key) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `\`getValue\` for \`${key}\` of \`${contextKey}\` bubbled to the top`
+        );
       }
+    },
+  };
 
-      render() {
-        return <Composed {...this.props} broadcast={this._broadcast} />;
-      }
-    };
+  function broadcasts(keys) {
+    return function(Composed) {
+      return class BroadcasterWrapper {
+        static contextTypes = contextTypes;
+        static childContextTypes = contextTypes;
+
+        constructor(props, context) {
+          this.props = props;
+          this._context = new Context(keys, context[contextKey] || topContext);
+          this._broadcast = this._context.broadcast.bind(this._context);
+        }
+
+        getChildContext() {
+          return { [contextKey]: this._context };
+        }
+
+        render() {
+          return <Composed {...this.props} broadcast={this._broadcast} />;
+        }
+      };
+    }
   }
-}
 
-export function observes(keys) {
-  return function(Composed) {
-    return class ObserverWrapper extends React.Component {
-      static contextTypes = broadcasterTypes;
+  function observes(keys) {
+    return function(Composed) {
+      return class ObserverWrapper extends React.Component {
+        static contextTypes = contextTypes;
 
-      constructor(props, context) {
-        super(props, context);
-        let contextValues = {};
-        let broadcaster = this.context[broadcasterKey];
-        this._unsubscribeHandles = keys.map(key => {
-          contextValues[key] = broadcaster.getValue(key);
-          return broadcaster.subscribe(key, newValue => {
-            this.setState({ [key]: newValue });
+        constructor(props, context) {
+          super(props, context);
+          let contextValues = {};
+          let broadcaster = this.context[contextKey];
+          this._unsubscribeHandles = keys.map(key => {
+            contextValues[key] = broadcaster.getValue(key);
+            return broadcaster.subscribe(key, newValue => {
+              this.setState({ [key]: newValue });
+            });
           });
-        });
-        this.state = contextValues;
-      }
+          this.state = contextValues;
+        }
 
-      componentWillUnmount() {
-        this._unsubscribeHandles.forEach(handle => handle());
-      }
+        componentWillUnmount() {
+          this._unsubscribeHandles.forEach(handle => handle());
+        }
 
-      render() {
-        return <Composed {...this.props} {...this.state} />;
+        render() {
+          return <Composed {...this.props} {...this.state} />;
+        }
       }
     }
   }
+
+  return { broadcasts, observes };
 }
