@@ -1,5 +1,5 @@
 {
-  "name": "react-broadcast",
+  "name": "react-side-context",
   "version": "0.0.1",
   "main": "lib/index.js",
   "description": "React experiment with subscription-based context",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Morhaus/react-broadcast.git"
+    "url": "git@github.com:Morhaus/react-side-context.git"
   },
   "scripts": {
     "start": "webpack-simple-server -d examples/ -p $PORT -c webpack.examples.config.js",

@@ -1,4 +1,4 @@
-# react-broadcast
+# react-side-context
 
 Experiment with subscription-based context for React.
 
