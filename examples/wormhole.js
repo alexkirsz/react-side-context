@@ -1,5 +1,4 @@
 import React from 'react';
-import shallowEqual from 'react/lib/shallowEqual'
 import createContext from '../src';
 
 const { broadcasts, observes } = createContext('app');
