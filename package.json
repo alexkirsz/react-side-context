@@ -14,6 +14,7 @@
     "build": "rm -rf lib && babel -d lib/ --stage 0 src/"
   },
   "dependencies": {
+    "node-uuid": "^1.4.3",
     "react": "^0.13.3"
   },
   "devDependencies": {

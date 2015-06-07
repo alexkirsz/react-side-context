@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
+import uuid from 'node-uuid';
 
 import Context from './Context';
 
-export default function createContext(contextKey) {
+export default function createContext(contextName) {
+  const contextKey = uuid.v4();
+
   const contextTypes = {
     [contextKey]: PropTypes.instanceOf(Context),
   };
@@ -11,7 +14,7 @@ export default function createContext(contextKey) {
     subscribe(key) {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(
-          `\`subscribe\` for \`${key}\` of \`${contextKey}\` bubbled to the top`
+          `\`subscribe\` for \`${key}\` of \`${contextName}\` bubbled to the top`
         );
       }
     },
@@ -19,7 +22,7 @@ export default function createContext(contextKey) {
     getValue(key) {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(
-          `\`getValue\` for \`${key}\` of \`${contextKey}\` bubbled to the top`
+          `\`getValue\` for \`${key}\` of \`${contextName}\` bubbled to the top`
         );
       }
     },
