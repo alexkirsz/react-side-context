@@ -1,6 +1,6 @@
 {
   "name": "react-side-context",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "lib/index.js",
   "description": "React experiment with subscription-based context",
   "author": "Alexandre Kirszenberg <alexandre.kirszenberg@gmail.com>",
