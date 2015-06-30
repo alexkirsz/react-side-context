@@ -80,5 +80,34 @@ export default function createContext(contextName) {
     }
   }
 
-  return { broadcasts, observes };
+  class WithContext {
+    static contextTypes = contextTypes;
+    static childContextTypes = contextTypes;
+
+    constructor(props, context) {
+      this.props = props;
+      this._context = new Context(Object.keys(props.context), context[contextKey] || topContext);
+      this._broadcast = this._context.broadcast.bind(this._context);
+      this._broadcast(props.context);
+    }
+
+    componentWillUpdate(nextProps) {
+      if (
+        !nextProps.shouldBroadcast ||
+        nextProps.shouldBroadcast(this.props.context, nextProps.context)
+      ) {
+        this._broadcast(nextProps.context);
+      }
+    }
+
+    getChildContext() {
+      return { [contextKey]: this._context };
+    }
+
+    render() {
+      return this.props.children();
+    }
+  }
+
+  return { broadcasts, observes, WithContext };
 }
