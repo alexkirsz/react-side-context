@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "webpack-simple-server -d examples/ -p $PORT -c webpack.examples.config.js",
-    "build": "rm -rf lib && babel -d lib/ --stage 0 src/"
+    "prepublish": "rm -rf lib && babel -d lib/ --stage 0 src/"
   },
   "dependencies": {
     "node-uuid": "^1.4.3",
