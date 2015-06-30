@@ -1,5 +1,5 @@
 export default class Context {
-  constructor(keys, parent = topBroadcaster) {
+  constructor(keys, parent) {
     this._keys = keys;
     this._parent = parent;
 
